@@ -1,0 +1,192 @@
+# B4 — Feature Success Evaluation
+
+⸻
+
+1️⃣ Problem Clarification
+
+Leadership asked to “use ML to determine whether the feature was successful.”
+
+That framing is incorrect.
+
+The real question is:
+
+Did the feature cause a meaningful change in business outcomes?
+
+This is a causal impact problem, not a prediction problem.
+
+Decision-Makers
+	•	Product leadership
+	•	Growth / Monetization teams
+	•	Executive stakeholders
+
+Decision Informed
+	•	Keep or roll back the feature
+	•	Expand rollout
+	•	Invest further or iterate
+	•	Sunset
+
+Plain-English Problem Statement
+
+Determine whether the newly launched feature caused a statistically and practically meaningful change in key business outcomes, while controlling for trends, seasonality, and confounders.
+
+⸻
+
+2️⃣ Problem Type Classification
+
+Primary framing:
+	•	Causal analysis / experimentation
+
+If available:
+	•	A/B testing
+
+If not randomized:
+	•	Difference-in-Differences (DiD)
+	•	Interrupted Time Series (ITS)
+	•	Synthetic Control
+
+Not appropriate:
+	•	Supervised prediction models as “proof of success”
+	•	Correlation-based regression without causal structure
+
+Prediction answers what will happen.
+This question asks what changed because of the feature.
+
+⸻
+
+3️⃣ Data Science Scope
+
+Likely Available Data
+	•	User-level engagement metrics
+	•	Conversion rates
+	•	Retention (D1, D7, D30)
+	•	Revenue metrics
+	•	Feature exposure logs
+	•	Feature usage logs
+	•	Rollout timestamps
+	•	Cohort identifiers
+	•	Device / region segmentation
+	•	Marketing calendar
+
+Granularity
+	•	User-level
+	•	Session-level
+	•	Time-series (pre vs post)
+	•	Cohort-level (treated vs control)
+
+Key Data Risks
+	•	Seasonality effects
+	•	Concurrent marketing campaigns
+	•	Overlapping feature releases
+	•	Selection bias (early adopters)
+	•	Survivorship bias
+	•	Simpson’s paradox in aggregated metrics
+
+⸻
+
+4️⃣ Metric Hierarchy
+
+Success cannot be evaluated with a single raw metric.
+
+North Star Metric
+
+The primary outcome aligned with feature intent, e.g.:
+	•	Conversion rate
+	•	Paid activation
+	•	Weekly retained users
+	•	Revenue per active user
+
+Only one primary success metric should determine the decision.
+
+⸻
+
+Drivers (Explain the Why)
+	•	Feature adoption rate
+	•	Repeat usage
+	•	Funnel completion
+	•	Time-to-first-value
+	•	Engagement depth
+
+Drivers explain how impact happened.
+
+⸻
+
+Guardrails (Do No Harm)
+	•	Crash rate
+	•	Latency
+	•	Refunds
+	•	Support tickets
+	•	Churn
+	•	Negative feedback
+
+A feature can increase the North Star while damaging core product health. Guardrails prevent false wins.
+
+⸻
+
+5️⃣ Concrete Evaluation Plan
+	1.	Lock the metric hierarchy before analysis
+Prevents metric shopping.
+	2.	Define treatment exposure precisely
+Who had the feature? When? Did they actually use it?
+	3.	Select the evaluation design
+	•	A/B test if randomized
+	•	DiD / ITS if staggered rollout
+	•	Synthetic control if no clean control
+	4.	Validate pre-trends and comparability
+Ensure treated and control groups behaved similarly before launch.
+	5.	Estimate impact with uncertainty
+Report:
+	•	Lift %
+	•	Confidence intervals or Bayesian posterior
+	•	Effect size (practical significance)
+	6.	Segment cautiously for heterogeneity
+Only pre-defined segments (e.g., region, device, new vs existing users).
+	7.	Review guardrails
+Confirm no hidden harm.
+	8.	Produce a decision memo
+Clear recommendation:
+	•	Expand
+	•	Iterate
+	•	Re-test
+	•	Roll back
+
+⸻
+
+6️⃣ Use of LLMs
+
+LLMs were used to:
+	•	Explore causal frameworks beyond predictive ML
+	•	Enumerate quasi-experimental options
+	•	Stress-test whether supervised learning was appropriate
+
+LLM tendency to default to predictive modeling was explicitly rejected.
+Causal attribution was kept central.
+
+⸻
+
+7️⃣ Unknown Methods Discovery
+
+Synthetic Control
+
+When no randomized control exists:
+	•	Construct a weighted “virtual control” group
+	•	Match pre-launch trends
+	•	Measure divergence post-launch
+
+Initial incorrect assumption:
+
+No A/B test means no credible evaluation.
+
+Correction:
+
+Quasi-experimental methods can provide structured causal inference when properly designed.
+
+⸻
+
+Why This Case Matters
+
+This case demonstrates:
+	•	Disciplined problem framing
+	•	Clear separation between prediction and causation
+	•	Structured metric hierarchy
+	•	Decision-grade evaluation
+	•	Appropriate use of ML only where it adds value
