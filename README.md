@@ -23,3 +23,52 @@ Identifying an issue is not the same as explaining it. Both must be addressed.
 LLMs are used to explore framing and unknown methods, but final reasoning is constrained by product impact, feasibility, and data realism.
 
 This reflects the Machine Learning Workflow principles applied throughout the Master AI folder: define goals, understand data, establish baselines, then model incrementally.
+
+
+# B4 — Feature Success Evaluation
+
+Overview
+
+Leadership asked to “use ML to determine whether the feature was successful.”
+
+This case reframes the problem properly.
+
+Feature success is not a prediction problem.
+It is a causal impact problem.
+
+The goal is to determine whether the feature caused a meaningful change in business outcomes — not whether we can predict engagement.
+
+⸻
+
+Core Principle
+
+Correlation is not success.
+
+This case focuses on:
+	•	Causal inference
+	•	Experimental design
+	•	Metric hierarchy discipline
+	•	Decision-grade impact estimation
+
+If an A/B test exists, use it properly.
+If it doesn’t, apply structured quasi-experimental methods (Difference-in-Differences, Interrupted Time Series, Synthetic Control).
+
+⸻
+
+What This Case Demonstrates
+	•	Correct problem framing before modeling
+	•	Metric hierarchy design (North Star + drivers + guardrails)
+	•	Step-by-step evaluation plan
+	•	Clear separation between prediction and causation
+	•	Disciplined ML workflow thinking
+
+⸻
+
+Why This Matters
+
+In business environments, “use AI” is often the default response to ambiguous problems.
+
+This case shows that:
+	•	The right solution is sometimes better experimentation, not better models.
+	•	Product decisions require causal reasoning.
+	•	ML should only be used where it adds marginal value.
