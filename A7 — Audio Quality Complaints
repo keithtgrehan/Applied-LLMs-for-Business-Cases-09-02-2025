@@ -1,0 +1,240 @@
+A7 — Audio Quality Complaints
+
+⸻
+
+1️⃣ Problem Clarification
+
+Users report distorted, corrupted, silent, or glitchy voice messages.
+
+This is not an “AI audio enhancement” problem.
+
+It is a reliability monitoring and diagnosis problem.
+
+What we are solving
+	•	Detect technically degraded voice messages
+	•	Identify patterns across device / app version / codec / network
+	•	Help engineering reduce failure rates
+	•	Prevent regressions after releases
+
+Who this system is for
+	•	Engineering (client, codec, pipeline)
+	•	QA / Release managers
+	•	Product leadership monitoring reliability
+
+What decision this informs
+	•	Should we roll back a release?
+	•	Which cohort (device × version × codec × network) is risky?
+	•	Where should engineering focus?
+	•	Should users be prompted to re-record?
+
+Plain-English Problem Statement
+
+Build a system that detects technically degraded voice messages using signal characteristics and metadata, without pre-existing labels, and surfaces actionable insights to reduce failure rates and prevent regressions.
+
+This is a signal integrity monitoring system, not a speech understanding system.
+
+⸻
+
+2️⃣ Problem Type Classification
+
+Because there are no labeled examples of “bad audio”, this is not initially a supervised learning problem.
+
+Correct framing (phase-based)
+	•	Unsupervised anomaly detection
+	•	Cohort-level statistical analysis
+	•	Optional later: Weak supervision → supervised model
+
+This aligns with the ML Workflow principles in the Master AI folder:
+	•	Define the real goal first
+	•	Start simple
+	•	Avoid modeling without labels
+	•	Build structure before prediction
+
+⸻
+
+3️⃣ Data Science Scope
+
+Available Data
+
+Audio
+	•	Raw waveform or encoded file
+	•	Duration
+	•	Bitrate
+	•	Sample rate
+
+Metadata
+	•	Device model
+	•	OS version
+	•	App version
+	•	Codec type
+	•	Network type
+	•	Upload retries
+	•	Transcoder version
+	•	Region
+	•	Client error logs
+
+This is a multi-modal dataset:
+	•	Audio signal
+	•	Structured metadata
+	•	Time-series (release-level drift)
+
+⸻
+
+Granularity
+	•	Message-level (primary)
+	•	Cohort-level (device × version × codec)
+	•	Release-level (time component)
+
+⸻
+
+Labels
+
+None initially.
+
+Possible creation paths:
+	•	Human QA review of anomaly samples
+	•	Internal structured scoring (clipping, dropout, silence, etc.)
+	•	Weak behavioral signals (re-record, complaint taps)
+
+⸻
+
+Explicit Data Risks
+	•	“Bad” is multi-class, not binary
+	•	Complaint data is biased
+	•	Privacy implications (voice content)
+	•	Device imbalance
+	•	Risk of leakage if complaint behavior becomes proxy label
+
+⸻
+
+4️⃣ Modeling Approach (Incremental and Realistic)
+
+Phase 0 — Non-ML First
+
+Before ML:
+	•	Define failure taxonomy:
+	•	Clipping
+	•	Dropouts
+	•	Excessive silence
+	•	Codec artifacts
+	•	Sample rate mismatch
+	•	Implement integrity checks:
+	•	Duration mismatch
+	•	Frame discontinuity
+	•	Silence thresholds
+	•	Build release-level dashboards
+
+This follows the ML Workflow discipline: start with the baseline.
+
+⸻
+
+Phase 1 — Feature Engineering
+
+Extract signal health features:
+	•	RMS energy (mean / variance)
+	•	% clipped samples
+	•	Silence ratio
+	•	Spectral centroid
+	•	Spectral flatness
+	•	Frame discontinuity count
+	•	File-size vs duration anomaly
+
+Join with metadata.
+
+This mirrors prior Feature Engineering and EDA work in the Master AI folder:
+Understand structure before modeling.
+
+⸻
+
+Phase 2 — Unsupervised Detection
+
+Use:
+	•	Isolation Forest
+	•	One-Class SVM
+	•	Autoencoder reconstruction error on spectrogram features
+
+Goal:
+	•	Rank suspicious messages
+	•	Surface high-risk cohorts
+	•	Detect systemic shifts
+
+This connects directly to:
+	•	Outlier detection concepts
+	•	Bias–variance reasoning
+	•	Monitoring for drift
+
+⸻
+
+Phase 3 — Weak Supervision (Optional)
+
+Create heuristic labeling functions:
+	•	If clipping > threshold → likely distorted
+	•	If silence ratio > threshold → blank
+	•	If duration mismatch → corrupted
+
+Combine multiple noisy rules to generate probabilistic labels.
+
+Then optionally train a supervised classifier once labels are validated.
+
+⸻
+
+Explicit Non-Goals
+	•	No speech-to-text
+	•	No NLP modeling
+	•	No end-to-end deep audio models initially
+	•	No content-level judgment
+
+This is about system integrity, not semantic content.
+
+⸻
+
+5️⃣ Use of LLMs (Critical Reflection)
+
+How LLMs were used
+	•	Enumerating technical failure modes
+	•	Exploring anomaly detection strategies
+	•	Identifying weak supervision as a label bootstrapping method
+
+Where I corrected the LLM tendency
+
+LLMs often default to:
+	•	Deep end-to-end models
+	•	Immediate classification pipelines
+
+I constrained the scope to:
+	•	Signal integrity features
+	•	Diagnosable engineering outputs
+	•	Incremental modeling
+
+This keeps the project grounded in product impact, not modeling novelty.
+
+⸻
+
+6️⃣ Unknown Methods Discovery
+
+Weak Supervision
+
+Concept:
+
+Instead of manually labeling thousands of samples, define multiple imperfect heuristic rules. Each rule is noisy. A probabilistic model learns how reliable each rule is and generates soft labels.
+
+Initial incorrect assumption:
+
+No labels = no training.
+
+Correction:
+
+You can bootstrap labels using structured heuristics and anomaly detection.
+
+⸻
+
+Contextual Note — AbleReport
+
+In AbleReport, I extract structured technical metadata from audio production sessions to diagnose system-level issues rather than creative content.
+
+The mindset is similar here:
+	•	Extract structured signal characteristics
+	•	Diagnose system integrity
+	•	Avoid content judgment
+
+However, this project remains strictly focused on messaging reliability.
