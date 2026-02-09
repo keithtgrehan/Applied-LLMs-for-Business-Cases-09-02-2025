@@ -72,3 +72,43 @@ This case shows that:
 	•	The right solution is sometimes better experimentation, not better models.
 	•	Product decisions require causal reasoning.
 	•	ML should only be used where it adds marginal value.
+
+	B6 — Sales Performance Diagnosis
+
+Overview
+
+Leadership asked for an ML model to identify underperforming sales regions.
+
+This case reframes the problem properly.
+
+Underperformance is not low revenue.
+It is revenue below structural expectation.
+
+The goal is to build a fair, interpretable diagnostic system that:
+	•	Estimates expected performance using structural variables
+	•	Identifies meaningful deviations
+	•	Explains drivers behind performance gaps
+
+⸻
+
+Core Principle
+
+Compare like with like.
+
+Raw revenue rankings are misleading. Structural factors such as market size, pipeline quality, headcount, and seasonality must be controlled for before evaluating performance.
+
+This case applies:
+	•	Regression modeling
+	•	Residual analysis
+	•	Peer-group clustering
+	•	Diagnostic interpretation
+
+⸻
+
+What This Case Demonstrates
+	•	Proper ML problem framing
+	•	Fair performance evaluation
+	•	Interpretable modeling over black-box methods
+	•	Alignment with regression and evaluation material in the Master AI folder
+
+This is decision-support ML — not a labeling machine.
