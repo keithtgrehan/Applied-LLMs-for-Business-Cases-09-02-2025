@@ -1,0 +1,66 @@
+B6 — Sales Performance Diagnosis
+1️⃣ Problem Clarification
+
+• Leadership asked to build an ML model to identify underperforming teams.
+• The real issue is defining underperformance relative to structural context.
+• This is a diagnostic problem, not a leaderboard exercise.
+• Decision-makers: Sales leadership, Regional directors, RevOps.
+• Decisions informed: intervention, resource allocation, quota adjustments.
+Plain-English Problem Statement
+
+• Estimate expected sales performance using structural factors, then identify regions or teams that significantly over- or under-perform relative to that expectation, and explain why.
+2️⃣ Problem Type Classification
+
+• Primary: Regression modeling + residual analysis.
+• Supporting: Anomaly detection and clustering for peer grouping.
+• Not appropriate: Raw revenue ranking or black-box classification.
+• Focus: Fair, context-adjusted performance evaluation.
+3️⃣ Data Science Scope
+
+• Revenue, quota attainment, pipeline size, win rate, deal size.
+• Marketing spend, headcount, rep tenure, product mix.
+• Structural controls: market size, economic conditions, seasonality.
+• Granularity: Region-level, team-level, time-series.
+• Risks: Simpson’s paradox, leakage, survivorship bias, quota distortion.
+4️⃣ Modeling Approach
+
+Phase 0 — EDA First
+
+• Inspect distributions, trends, and structural differences before modeling.
+Phase 1 — Expected Performance Model
+
+• Use linear regression baseline to estimate expected revenue.
+• Include structural predictors (pipeline, market size, headcount, etc.).
+Phase 2 — Residual Analysis
+
+• Residual = Actual − Expected.
+• Negative residuals indicate underperformance relative to context.
+• Interpret results with R² and diagnostic checks.
+Phase 3 — Anomaly Detection / Peer Groups
+
+• Use clustering to group structurally similar regions.
+• Evaluate performance within peer groups for fairness.
+Explicit Non-Goals
+
+• No opaque black-box models.
+• No labeling teams without structural adjustment.
+• No single-metric simplification.
+5️⃣ Concrete Evaluation Plan
+
+• 1. Define structural control variables.
+• 2. Build regression baseline model.
+• 3. Validate model diagnostics and residual behavior.
+• 4. Identify statistically meaningful deviations.
+• 5. Cluster peer regions and re-evaluate within groups.
+• 6. Conduct sensitivity checks.
+• 7. Deliver explanation-first report with drivers of underperformance.
+6️⃣ Use of LLMs
+
+• Used to enumerate structural confounders and alternative framings.
+• Rejected default suggestion of classification-based labeling.
+• Maintained focus on fairness-adjusted residual diagnostics.
+7️⃣ Unknown Methods Discovery
+
+• Peer-based performance modeling through clustering.
+• Corrected assumption: Low revenue does not equal underperformance.
+• Underperformance must be measured relative to structural expectation.
